@@ -116,7 +116,6 @@ class DemoCustomPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    final before = DateTime.now();
     final colors = [Colors.blue, Colors.blueGrey, Colors.lightGreen];
     for (var i = 0; i < 50; i += 1) {
       final color = colors[i % colors.length];
@@ -286,59 +285,5 @@ class DemoCustomPainter extends CustomPainter {
       Float32List.fromList(positions),
       textureCoordinates: Float32List.fromList(textureCoordinates),
     );
-  }
-
-  ui.Image _makePatternImage() {
-    final recorder = ui.PictureRecorder();
-    const rect = Rect.fromLTWH(0, 0, 5, 100);
-    final canvas = Canvas(recorder, rect);
-
-    final shader = _makeGradient().createShader(rect);
-
-    final paint = Paint()
-      ..style = PaintingStyle.fill
-      ..shader = shader;
-
-    canvas.drawRect(rect, paint);
-
-    shader.dispose();
-
-    final picture = recorder.endRecording();
-    return picture.toImageSync(rect.width.ceil(), rect.height.ceil());
-  }
-
-  LinearGradient _makeGradient() {
-    final colors = <Color>[
-      Colors.blue.withAlpha(0),
-      Colors.blue,
-      Colors.blue,
-      Colors.blue.withAlpha(0)
-    ];
-    final stops = <double>[0, 0.15, 0.85, 1];
-    return LinearGradient(
-      begin: Alignment.topCenter,
-      end: Alignment.bottomCenter,
-      colors: colors,
-      stops: stops,
-    );
-  }
-
-  void _drawText(Canvas canvas, String text, Offset offset) {
-    final textSpan = TextSpan(
-      text: text,
-      style: const TextStyle(
-        color: Colors.black,
-        fontSize: 12,
-      ),
-    );
-    final textPainter = TextPainter(
-      text: textSpan,
-      textDirection: TextDirection.ltr,
-    );
-    textPainter.layout(
-      minWidth: 0,
-      maxWidth: 100,
-    );
-    textPainter.paint(canvas, offset);
   }
 }
